@@ -1,5 +1,6 @@
 import 'dotenv/config'; // it is going to take all the variables that are in the .env file and put them in the process.env
 import { config, createSchema } from '@keystone-next/keystone/schema';
+import { User } from './schemas/User';
 
 const databaseURL =
   process.env.DATABASE_URL || 'mongodb://localhost/keystone-sick-fits';
@@ -22,6 +23,7 @@ export default config({
   },
   lists: createSchema({
     // TODO: scchemaa items go here
+    User,
   }),
   ui: {
     // TODO: change this for roles and permissions
@@ -29,3 +31,5 @@ export default config({
   },
   // TODO: add session values here
 });
+
+// vid 13 done start 14
