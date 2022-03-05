@@ -1,6 +1,12 @@
 import 'dotenv/config'; // it is going to take all the variables that are in the .env file and put them in the process.env
+import { createAuth } from '@keystone-next/auth';
 import { config, createSchema } from '@keystone-next/keystone/schema';
+import {
+  withItemData,
+  statelessSessions,
+} from '@keystone-next/keystone/session';
 import { User } from './schemas/User';
+import { Product } from './schemas/Product';
 
 const databaseURL =
   process.env.DATABASE_URL || 'mongodb://localhost/keystone-sick-fits';
@@ -9,27 +15,45 @@ const sessionConfig = {
   secret: process.env.COOKIE_SECRET,
 };
 
-export default config({
-  server: {
-    cors: {
-      origin: [process.env.FRONTEND_URL],
-      credentials: true,
-    },
+const { withAuth } = createAuth({
+  listKey: 'User',
+  identityField: 'email',
+  secretField: 'password',
+  initFirstItem: {
+    fields: ['name', 'email', 'password'],
+    // TODO: add in initial roles here
   },
-  db: {
-    adapter: 'mongoose',
-    url: databaseURL,
-    // TODO: add data seeding here
-  },
-  lists: createSchema({
-    // TODO: scchemaa items go here
-    User,
-  }),
-  ui: {
-    // TODO: change this for roles and permissions
-    isAccessAllowed: () => true,
-  },
-  // TODO: add session values here
 });
+
+export default withAuth(
+  config({
+    server: {
+      cors: {
+        origin: [process.env.FRONTEND_URL],
+        credentials: true,
+      },
+    },
+    db: {
+      adapter: 'mongoose',
+      url: databaseURL,
+      // TODO: add data seeding here
+    },
+    lists: createSchema({
+      // TODO: scchemaa items go here
+      User,
+      Product,
+    }),
+    ui: {
+      // Show the UI only for poeple who pass this test
+      // @typescript-eslint/no-unsafe-member-access
+      isAccessAllowed: ({ session }) =>
+        !!session?.data,
+    },
+    session: withItemData(statelessSessions(sessionConfig), {
+      // GraphQL Query
+      User: 'id name email',
+    }),
+  })
+);
 
 // vid 13 done start 14

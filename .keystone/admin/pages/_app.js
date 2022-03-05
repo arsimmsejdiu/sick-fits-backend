@@ -7,10 +7,20 @@ import { Core } from '@keystone-ui/core';
 import * as viewf0863f47 from '../../../node_modules/@keystone-next/fields/types/mongoId/views';
 import * as viewc530b850 from '../../../node_modules/@keystone-next/fields/types/text/views';
 import * as view7708c724 from '../../../node_modules/@keystone-next/fields/types/password/views';
+import * as view596e128a from '../../../node_modules/@keystone-next/fields/types/timestamp/views';
+import * as viewc942265a from '../../../node_modules/@keystone-next/fields/types/select/views';
+import * as viewad3a9a70 from '../../../node_modules/@keystone-next/fields/types/integer/views';
 
 const adminConfig = {};
 
-const fieldViews = { viewf0863f47, viewc530b850, view7708c724 };
+const fieldViews = {
+  viewf0863f47,
+  viewc530b850,
+  view7708c724,
+  view596e128a,
+  viewc942265a,
+  viewad3a9a70,
+};
 
 const lazyMetadataQuery = {
   kind: 'Document',
@@ -150,6 +160,29 @@ const lazyMetadataQuery = {
             },
             loc: { start: 22, end: 234 },
           },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'authenticatedItem' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'InlineFragment',
+                  typeCondition: {
+                    kind: 'NamedType',
+                    name: { kind: 'Name', value: 'User' },
+                  },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
         ],
       },
     },
@@ -161,7 +194,7 @@ export default function App({ Component, pageProps }) {
     <Core>
       <KeystoneProvider
         adminConfig={adminConfig}
-        adminMetaHash="q04w6s"
+        adminMetaHash="1y0smr5"
         fieldViews={fieldViews}
         lazyMetadataQuery={lazyMetadataQuery}
       >
